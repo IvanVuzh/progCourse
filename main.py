@@ -41,6 +41,23 @@ def indexes_of_K(arr, K):
     return index_arr
 
 
+def indexes_of_K_for_practice(arr, K):
+    index_arr = []
+    operation_made = 0
+    print('Made an array for indexes')
+    print('Start loop through array which is checking if i-element is equal to K')
+    for i in range(0, len(arr)):
+        operation_made += 1
+        if(int(arr[i]) == int(K)):
+            print('element with index', i, 'is equal to K, add it to array of indexes')
+            operation_made += 1
+            index_arr.append(i)
+    # print('Index of k in array is', index_arr)
+    print('Operations made:', operation_made)
+    print('The result is:')
+    return index_arr
+
+
 def no_positive(arr):
     result = True
     for i in range(0, len(arr)):
@@ -97,3 +114,12 @@ if(validator(n)):
         else:
             print('Biggest element in array x != k', biggest_in_array(x))
         print('The result array y is:', y)
+        # Доповнити завдання №2 (програмування).
+        # В результуючому масиві знайти число, яке дорівнює К за допомогою бінарного пошуку.
+        # Вивести позицію елемента, якщо елементів декілька, то позиції всіх елементів.
+        # Вивести кількість операцій, необхідних для пошуку, та всі здійснені всі операції.
+    K = input("Enter number to be found (K):")
+    if(validator(K)):
+        print('Checked if K is an integer')
+        print(indexes_of_K_for_practice(y, K))
+        print('printed result')
