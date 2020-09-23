@@ -55,7 +55,7 @@ def cubing_array(arr, index):
     for i in range(index):
         cube_of_el = arr[i] * arr[i]
         arr[i] = cube_of_el
-    # return arr
+    return arr
 # Дано вектори x y z цілих чисел розмірності N.
 # Якщо найбільший елемент вектора x дорівнює K і знаходиться в першій частині цього вектора,
 # і якщо у векторі y немає додатніх елементів, тоді всі елементи,
@@ -85,7 +85,7 @@ if(validator(n)):
                         max_in_y = biggest_in_array(y)
                         index_of_max_in_y = indexes_of_K(y, max_in_y)
                         if(len(index_of_max_in_y) == 1):
-                            cubing_array(y, index_of_max_in_y[0])
+                            y = cubing_array(y, index_of_max_in_y[0])
                         else:
                             print('More than 1 biggest number in array y')
                     else:
