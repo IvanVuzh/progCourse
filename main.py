@@ -25,8 +25,8 @@ def array_input(x, N):
 
 
 def biggest_in_array(arr):
-    biggest = -99999999
-    for i in range(0, len(arr)):
+    biggest = arr[0]
+    for i in range(1, len(arr)):
         if(int(arr[i]) > biggest):
             biggest = int(arr[i])
     return biggest
