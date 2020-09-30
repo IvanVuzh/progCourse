@@ -68,7 +68,7 @@ def binary_search(arr, x):
     return result
 
 
-def sort(arr, k):
+def sort(arr):
     index_arr = []
     result = []
     for i in range(len(arr)):
