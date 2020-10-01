@@ -55,24 +55,30 @@ def binary_search(arr, x):
     mid_index = 0
     while low_index <= high_index:
         mid_index = (low_index + high_index) // 2
-        if arr[mid_index] < x:
+        # print("mid index is", mid_index)
+        if arr[mid_index] < int(x):
             operations += 1
             low_index = mid_index + 1
-        elif arr[mid_index] > x:
+        elif arr[mid_index] > int(x):
             operations += 1
             high_index = mid_index - 1
         else:
             operations += 1
             result.append(mid_index)
+            it = 1
+            while arr[mid_index + it] == int(x) or arr[mid_index - it] == int(x):
+                if arr[mid_index + it] == int(x):
+                    result.append(mid_index + it)
+                if arr[mid_index - it] == int(x):
+                    result.append(mid_index - it)
+                it += 1
+            result.append(operations)
+            return result
     result.append(operations)
     return result
 
 
-def sort(arr):
-    index_arr = []
-    result = []
-    for i in range(len(arr)):
-        index_arr = i
+def sort(arr, index_arr):
     operation_made = 0
     print('Made an array for indexes')
     print('Start bubble sort of array and index array')
@@ -82,18 +88,24 @@ def sort(arr):
             operation_made += 1
             if arr[j] > arr[j + 1]:
                 operation_made += 1
-                swap(arr[i], arr[j])
+                swap(arr[j], arr[j + 1])
                 operation_made += 1
                 swap(index_arr[j], index_arr[j + 1])
                 operation_made += 1
     arr.append(operation_made)
     # print('Index of k in array is', index_arr)
-    return arr
+    # print("sorted arr: ", arr)
+    return arr, index_arr
 
 
 def indexes_of_k_for_practice(arr, k):
-    operation_made = arr[len(arr) - 1]
+    index_arr = list(range(len(arr)))
+    result = []
     arr.pop()
+    arr = sort(arr, index_arr)[0]
+    index_arr = sort(arr, index_arr)[1]
+    operation_made = arr[len(arr) - 1]
+    print('Operations made:', operation_made)
     result_indexes_sorted = binary_search(arr, k)
     print('got index(es) of k in sorted array')
     operation_made += result_indexes_sorted[len(result_indexes_sorted) - 1]
@@ -102,7 +114,7 @@ def indexes_of_k_for_practice(arr, k):
         operation_made += 1
         result = index_arr[result_indexes_sorted[i]]
     print('Operations made:', operation_made)
-    print('The result is:')
+    print('The result is position', end=" ")
     return result
 
 
