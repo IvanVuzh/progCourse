@@ -27,6 +27,23 @@ def print_matrix(arr):
         print(ln)
 
 
+def make_matrix(N):
+    if int(N) == 1:
+        for i in range(int(N)):
+            print(i, end=" ")
+            print()
+    elif int(N) > 1:
+        matrix = [[0] * int(N) for j in range(int(N))]
+        matrix_odd_row = list(range(1, int(N) + 1))
+        matrix_even_row = list(range(int(N), 0, -1))
+        for i in range(int(N)):
+            if i % 2 == 1:
+                matrix[i] = matrix_odd_row
+            else:
+                matrix[i] = matrix_even_row
+    print_matrix(matrix)
+
+
 ender = "no"
 while ender == "no":
     user_choice = input("You are now in menu. Start program run? (yes/no): ")
@@ -38,19 +55,7 @@ while ender == "no":
     if user_choice == "yes":
         N = input("Enter n: ")
         if validator(N):
-            if int(N) == 1:
-                for i in range(int(N)):
-                    print(i)
-            elif int(N) > 1:
-                matrix = [[0]*int(N) for j in range(int(N))]
-                matrix_odd_row = list(range(1, int(N)+1))
-                matrix_even_row = list(range(int(N), 0, -1))
-                for i in range(int(N)):
-                    if i % 2 == 1:
-                        matrix[i] = matrix_odd_row
-                    else:
-                        matrix[i] = matrix_even_row
-            print_matrix(matrix)
+            make_matrix(N)
         ender = input("Exit program? (yes/no): ")
     elif user_choice == "no":
         ender = input("Exit program? (yes/no): ")
