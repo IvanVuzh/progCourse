@@ -10,16 +10,9 @@
 # 7. Код повинен бути якісним: клас повинен бути в окремому файлі, назва файла
 # не повинна бути захардкоджена, читання з файла - окрема функція, тощо.
 # 8. Всі методи повинні бути універсальні і не залежати від кількості параметрів класу.
-
-from OrderFile import Order
 import os
-
-
-def file_not_empty(file_name):
-    if os.stat(file_name).st_size == 0:
-        return False
-    else:
-        return True
+from OrderFile import Order
+from ValidationFile import Validators
 
 
 class Collection:
@@ -40,45 +33,60 @@ class Collection:
             self.list_of_orders[i].for_search(data)
 
     def sort(self, user_choice):
-        if user_choice == 1:
-           self.list_of_orders.sort(key=lambda Order: Order.id)
-        if user_choice == 2:
-            self.list_of_orders.sort(key=lambda Order: Order.order_status)
-        if user_choice == 3:
-            self.list_of_orders.sort(key=lambda Order: Order.amount)
-        if user_choice == 4:
-            self.list_of_orders.sort(key=lambda Order: Order.discount)
-        if user_choice == 5:
-            self.list_of_orders.sort(key=lambda Order: Order.order_date)
-        if user_choice == 6:
-            self.list_of_orders.sort(key=lambda Order: Order.shipped_date)
-        if user_choice == 7:
-            self.list_of_orders.sort(key=lambda Order: Order.customer_email)
+        if (user_choice == 'id'
+                or user_choice == 'amount'
+                or user_choice == 'discount'):
+            self.list_of_orders.sort(key=lambda Order: int(getattr(Order, Order.attr_dict[user_choice])))
+        else:
+            for name in Order.attr_dict:
+                if user_choice == name:
+                    self.list_of_orders.sort(key=lambda Order: getattr(Order, Order.attr_dict[name]))
+
+        # if user_choice == 1:
+            # self.list_of_orders.sort(key=lambda Order: Order.id)
+        # if user_choice == 2:
+            # self.list_of_orders.sort(key=lambda Order: Order.order_status)
+        # if user_choice == 3:
+            # self.list_of_orders.sort(key=lambda Order: Order.amount)
+        # if user_choice == 4:
+            # self.list_of_orders.sort(key=lambda Order: Order.discount)
+        # if user_choice == 5:
+            # self.list_of_orders.sort(key=lambda Order: Order.order_date)
+        # if user_choice == 6:
+            # self.list_of_orders.sort(key=lambda Order: Order.shipped_date)
+        # if user_choice == 7:
+            # self.list_of_orders.sort(key=lambda Order: Order.customer_email)
+
+    # def edit_order(self):
 
     def print(self):
         for i in range(len(self.list_of_orders)):
-            self.list_of_orders[i].print()
+            print(self.list_of_orders[i].make_str_for_print())
 
     def deleter(self, identificator, file_name):
-        del self.list_of_orders[identificator]
+        del self.list_of_orders[identificator - 1]
         self.rewriting_to_file(file_name)
 
-    def change(self, identificator, what_to_change, new_data):
-        self.list_of_orders[identificator - 1].changer(what_to_change, new_data)
+    def change(self, identificator, what_to_change, new_data, file_name):
+        self.list_of_orders[identificator - 1].changer2(what_to_change, new_data)
+        self.rewriting_to_file(file_name)
 
     def read_from_file(self, file_name):
-        if file_not_empty(file_name):
+        if Validators.file_not_empty(file_name):
             f = open(file_name)
             lines = f.readlines()
-            to_add = Order(0, "n/a", 0, 0, 1970, 1, 1, 1970, 1, 1, "n/a")
+            to_add = Order
+            # print(to_add.make_str())
             for i in range(len(lines)):
                 line = lines[i]
                 if i != len(lines) - 1:
                     line = line[:-1]
-                to_add = to_add.make(line)
+                # print("line is:", line)
+                to_add = Order.str_to_order(to_add, line)
                 self.list_of_orders.append(to_add)
 
     def rewriting_to_file(self, file_name):
         f = open(file_name, "w")
         for i in range(len(self.list_of_orders)):
-            self.list_of_orders[i].append_to_file(file_name)
+            cut = i == len(self.list_of_orders) - 1
+            self.list_of_orders[i].append_to_file(file_name, cut)
