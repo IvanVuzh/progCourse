@@ -1,6 +1,6 @@
 # Клас ЗАМОВЛЕННЯ: ID, order_status (paid, refunded, not paid), amount, discount (percentage),
 # order_date, shipped_date, customer_email
-import datetime as dt
+import datetime
 import re
 from ValidationFile import Validators
 
@@ -26,37 +26,51 @@ class Order:
     def str_to_order(self, line):
         line = line.split(", ")
         # print("line = ", line)
-        if Validators.validate_id(line[0]):
-            if Validators.payment_validation(line[1]):
-                if Validators.validate_amount(line[2]):
-                    if Validators.validate_discount(line[3]):
-                        if Validators.validate_date(line[4]):
-                            if Validators.validate_date(line[5]):
-                                if Validators.validate_email(line[6]):
-                                    dictionary = self.attr_dict.copy()
-                                    i = 0
-                                    for name in self.attr_dict:
-                                        # print(dictionary[name] + "=" + line[i])
-                                        dictionary[name] = line[i].lower()
-                                        # print(dictionary[name])
-                                        i += 1
-                                    # print("Created dictionary is", dictionary)
-                                    res = Order(dictionary)
-                                    return res
-                                else:
-                                    print("Error in line (wrong email in line)")
-                            else:
-                                print("Error in line (wrong shipped date in line)")
-                        else:
-                            print("Error in line (wrong order date in line)")
-                    else:
-                        print("Error in line (wrong discount in line)")
-                else:
-                    print("Error in line (wrong amount in line)")
-            else:
-                print("Error in line (wrong order status in line)")
+        is_error = False
+        date_error = False
+        if not Validators.validate_id(line[0]):
+            print("Error in line (wrong id in line). Wrong data: " + line[0])
+            is_error = True
+        if not Validators.payment_validation(line[1]):
+            print("Error in line (wrong order status in line). Wrong data: " + line[1])
+            is_error = True
+        if not Validators.validate_amount(line[2]):
+            print("Error in line (wrong amount in line). Wrong data: " + line[2])
+            is_error = True
+        if not Validators.validate_discount(line[3]):
+            print("Error in line (wrong discount in line). Wrong data: " + line[3])
+            is_error = True
+        if not Validators.validate_date(line[4]):   # still raising an error
+            print("Error in line. Wrong order date in line. Incorrect data format, should be YYYY-MM-DD. Wrong data: "
+                  + line[4])
+            is_error = True
+            date_error = True
+        if not Validators.validate_date(line[5]):   # still raising an error
+            print("Error in line. Wrong shipped date in line. Incorrect data format, should be YYYY-MM-DD. Wrong data: "
+                  + line[5])
+            is_error = True
+            date_error = True
+        if not date_error:
+            if datetime.datetime.strptime(line[4], '%Y-%m-%d') > datetime.datetime.strptime(line[5], '%Y-%m-%d'):
+                print("Error in line (order was made after shipping (change dates))")
+                is_error = True
+        if not Validators.validate_email(line[6]):
+            print("Error in line (wrong email in line). Wrong data: " + line[6])
+            is_error = True
+        if not is_error:
+            dictionary = self.attr_dict.copy()
+            i = 0
+            for name in self.attr_dict:
+                # print(dictionary[name] + "=" + line[i])
+                dictionary[name] = line[i].lower()
+                # print(dictionary[name])
+                i += 1
+            # print("Created dictionary is", dictionary)
+            res = Order(dictionary)
+            return res
         else:
-            print("Error in line (wrong id in line)")
+            print("######## Caught an error in data file ########")
+            return 1
 
     def make_str_for_print(self):
         to_print = "#################################################################\n" \

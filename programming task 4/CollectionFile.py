@@ -75,15 +75,16 @@ class Collection:
         if Validators.file_not_empty(file_name):
             f = open(file_name)
             lines = f.readlines()
-            to_add = Order
             # print(to_add.make_str())
             for i in range(len(lines)):
+                to_add = Order
                 line = lines[i]
                 if i != len(lines) - 1:
                     line = line[:-1]
                 # print("line is:", line)
-                to_add = Order.str_to_order(to_add, line)
-                self.list_of_orders.append(to_add)
+                if Order.str_to_order(to_add, line) != 1:
+                    to_add = Order.str_to_order(to_add, line)
+                    self.list_of_orders.append(to_add)
 
     def rewriting_to_file(self, file_name):
         f = open(file_name, "w")

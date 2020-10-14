@@ -23,7 +23,6 @@ class Validators:
             if 100 > int(data) > -1:
                 return True
             else:
-                print("########Wrong discount data########")
                 return False
 
     @staticmethod
@@ -39,7 +38,6 @@ class Validators:
         if os.path.exists(file_name):
             return True
         else:
-            print("File doesn't exist")
             return False
 
     @staticmethod
@@ -56,7 +54,6 @@ class Validators:
         if re.search(regex, file_name):
             return True
         else:
-            print("########Error in filename########")
             return False
 
     @staticmethod
@@ -65,7 +62,6 @@ class Validators:
         if re.search(regex, data):
             return True
         else:
-            print("########Error in email address########")
             return False
 
     @staticmethod
@@ -74,7 +70,6 @@ class Validators:
             if int(data) > 0:
                 return True
             else:
-                print("########Error in amount########")
                 return False
 
     @staticmethod
@@ -83,7 +78,6 @@ class Validators:
             if int(data) > 0:
                 return True
             else:
-                print("########Error in id########")
                 return False
 
     @staticmethod
@@ -91,15 +85,24 @@ class Validators:
         if data == "paid" or data == "not paid" or data == "refunded":
             return True
         else:
-            print("########Error in payment info########")
             return False
 
     @staticmethod
     def validate_date(data):
+        data = data.split("-")
+        if (not represents_int(data[0])
+                or not represents_int(data[1])
+                or not represents_int(data[2])):
+            return False
+        year = int(data[0])
+        month = int(data[1])
+        day = int(data[2])
+        # print("Year: " + str(year) + "\t month: " + str(month) + "\tday: " + str(day))
         try:
-            datetime.datetime.strptime(data, '%Y-%m-%d')
+            datetime.date(year, month, day)
             return True
         except ValueError:
-            raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+            # print("This is the incorrect date string format. It should be YYYY-MM-DD")
+            return False
 
 # file ready

@@ -1,6 +1,5 @@
 from OrderFile import Order
 from ValidationFile import Validators
-import datetime as dt
 from CollectionFile import Collection
 from ValidationFile import represents_int
 
@@ -42,12 +41,13 @@ def main():
     file_name = read
     if Validators.file_not_empty(file_name):
         collection.read_from_file(file_name)
+    collection.print()
     adding = Order
     # adding.print()
     # obj = dt.datetime(2019, 10, 19)
     # print(obj.strftime("%x"))
     # collection.print()
-    while menu_choice != 7:
+    while menu_choice != 6:
         print("You are in main menu. Possible options:\n"
               "1 - search some data through all info\n"
               "2 - sort collection by some argument\n"
@@ -160,25 +160,6 @@ def main():
                         to_change_field = 'customer_email'
                     read = input("Enter new data:")
                     collection.change(to_change_id, to_change_field, read, file_name)
-                    # if to_change_field == 1:
-                        # if Validators.validate_id(read):
-                            # collection.change(to_change_id, to_change_field, read)
-                    # elif to_change_id == 3:
-                        # if Validators.validate_amount(read):
-                            # collection.change(to_change_id, to_change_field, read)
-                    # elif to_change_id == 6 or to_change_field == 5:
-                        # if Validators.validate_date(read):
-                            # collection.change(to_change_id, to_change_field, read)
-                    # elif to_change_field == 2:
-                        # if Validators.payment_validation(read):
-                            # collection.change(to_change_id, to_change_field, read)
-                    # elif to_change_field == 4:
-                        # if Validators.validate_discount(read):
-                            # collection.change(to_change_id, to_change_field, read)
-                    # elif to_change_field == 7:
-                        # if Validators.validate_email(read):
-                            # collection.change(to_change_id, to_change_field, read)
-                    # collection.rewriting_to_file(file_name)
             collection.print()
             print()
             print()
