@@ -19,17 +19,71 @@ from DecoratorsFile import represents_int
 # 8. Всі методи повинні бути універсальні і не залежати від кількості параметрів класу.
 
 
-def test():
-    data_dict = {'id': '3226', 'order_status': 'paid', 'amount': '5', 'discount': '10', 'order_date': '2019-09-22',
-                 'shipped_date': '2019-09-22', 'customer_email': 'help@gmail.com'}
-    test = Order(data_dict)
-    # test2 = Order(data_dict)
-    print(test.make_str_for_print())
-    # print(test2.make_str())
-    # print(Validators.validate_date("2020-10-08"))
-    line = "153, paid, 5, 67, 2020-10-08, 2020-10-08, iasdsd@gmail.com"
-    test = test.str_to_order2(line)
-    print(test.make_str_for_print())
+def sort_user_choice():
+    read = input("Enter a parameter to be sorted by:\n"
+                 "1 - id\n"
+                 "2 - order status\n"
+                 "3 - amount of product bought\n"
+                 "4 - discount\n"
+                 "5 - order date\n"
+                 "6 - shipped date\n"
+                 "7 - customer email\n")
+    while not Validators.menu_choice_and_sort_and_changer_validation(read):
+        read = input()
+    if int(read) == 1:
+        sort_choice = 'id'
+    elif int(read) == 2:
+        sort_choice = 'order_status'
+    elif int(read) == 3:
+        sort_choice = 'amount'
+    elif int(read) == 4:
+        sort_choice = 'discount'
+    elif int(read) == 5:
+        sort_choice = 'order_date'
+    elif int(read) == 6:
+        sort_choice = 'shipped_date'
+    elif int(read) == 7:
+        sort_choice = 'customer_email'
+    return sort_choice
+
+
+def editing_the_collection(collection):
+    read = input("Enter a number of order to be changed (enter 0 not ot change anything):")
+    if represents_int(read):
+        while collection.get_len() < int(read) or 0 > int(read):
+            read = input("Reenter a number of order to be changed(enter 0 not to change anything)")
+        if int(read) == 0:
+            pass
+        else:
+            to_change_id = int(read)
+            read = input("Enter an info to be changed\n"
+                         "1 - id\n"
+                         "2 - order status\n"
+                         "3 - amount\n"
+                         "4 - discount\n"
+                         "5 - order date\n"
+                         "6 - shipped date\n"
+                         "7 - customer email\n")
+            while not Validators.menu_choice_and_sort_and_changer_validation(int(read)) \
+                    or not represents_int(read):
+                read = input("Reenter an info to be changed")
+            to_change_field = int(read)
+            if int(read) == 1:
+                to_change_field = 'id'
+            elif int(read) == 2:
+                to_change_field = 'order_status'
+            elif int(read) == 3:
+                to_change_field = 'amount'
+            elif int(read) == 4:
+                to_change_field = 'discount'
+            elif int(read) == 5:
+                to_change_field = 'order_date'
+            elif int(read) == 6:
+                to_change_field = 'shipped_date'
+            elif int(read) == 7:
+                to_change_field = 'customer_email'
+            read = input("Enter new data:")
+            collection.change2(to_change_id, to_change_field, read, file_name)
 
 
 def main():
@@ -67,30 +121,7 @@ def main():
             print()
             print()
         elif menu_choice == 2:
-            read = input("Enter a parameter to be sorted by:\n"
-                         "1 - id\n"
-                         "2 - order status\n"
-                         "3 - amount of product bought\n"
-                         "4 - discount\n"
-                         "5 - order date\n"
-                         "6 - shipped date\n"
-                         "7 - customer email\n")
-            while not Validators.menu_choice_and_sort_and_changer_validation(read):
-                read = input()
-            if int(read) == 1:
-                sort_choice = 'id'
-            elif int(read) == 2:
-                sort_choice = 'order_status'
-            elif int(read) == 3:
-                sort_choice = 'amount'
-            elif int(read) == 4:
-                sort_choice = 'discount'
-            elif int(read) == 5:
-                sort_choice = 'order_date'
-            elif int(read) == 6:
-                sort_choice = 'shipped_date'
-            elif int(read) == 7:
-                sort_choice = 'customer_email'
+            sort_choice = sort_user_choice()
             collection.sort(sort_choice)
             collection.print()
             print()
@@ -124,43 +155,7 @@ def main():
             print()
             print()
         elif menu_choice == 5:
-            read = input("Enter a number of order to be changed (enter 0 not ot change anything):")
-            if represents_int(read):
-                while collection.get_len() < int(read) or 0 > int(read):
-                    read = input("Reenter a number of order to be changed(enter 0 not to change anything)")
-                if int(read) == 0:
-                    pass
-                else:
-                    to_change_id = int(read)
-                    read = input("Enter an info to be changed\n"
-                                 "1 - id\n"
-                                 "2 - order status\n"
-                                 "3 - amount\n"
-                                 "4 - discount\n"
-                                 "5 - order date\n"
-                                 "6 - shipped date\n"
-                                 "7 - customer email\n")
-                    while not Validators.menu_choice_and_sort_and_changer_validation(int(read)) \
-                            or not represents_int(read):
-                        read = input("Reenter an info to be changed")
-
-                    to_change_field = int(read)
-                    if int(read) == 1:
-                        to_change_field = 'id'
-                    elif int(read) == 2:
-                        to_change_field = 'order_status'
-                    elif int(read) == 3:
-                        to_change_field = 'amount'
-                    elif int(read) == 4:
-                        to_change_field = 'discount'
-                    elif int(read) == 5:
-                        to_change_field = 'order_date'
-                    elif int(read) == 6:
-                        to_change_field = 'shipped_date'
-                    elif int(read) == 7:
-                        to_change_field = 'customer_email'
-                    read = input("Enter new data:")
-                    collection.change2(to_change_id, to_change_field, read, file_name)
+            editing_the_collection(collection)
             collection.print()
             print()
             print()

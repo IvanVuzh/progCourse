@@ -46,7 +46,7 @@ class Validators:
                 # print( + data)
                 return False
             else:
-                print("Validated")
+                # print("Validated")
                 return True
         else:
             print("Error in line (discount not int). Wrong data: " + data)

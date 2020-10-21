@@ -87,8 +87,8 @@ class Collection:
                 if i != len(lines) - 1:
                     line = line[:-1]
                 # print("line is:", line)
-                if Order.str_to_order2(to_add, line, line_number) != 1:
-                    to_add = Order.str_to_order2(to_add, line, line_number)
+                if Order.str_to_order2(to_add, line) != 1:
+                    to_add = Order.str_to_order2(to_add, line)
                     self.list_of_orders.append(to_add)
                 else:
                     print("Data error in line " + str(i + 1))

@@ -86,7 +86,7 @@ class Order:
             print("######## Caught an error in data file ########")
             return 1
 
-    def str_to_order2(self, line, line_number):
+    def str_to_order2(self, line):
         line = line.split(", ")
         # print("line = ", line)
         all_is_validated = True
@@ -135,21 +135,6 @@ class Order:
         to_write = to_write[:-2]
         to_write += '\n'
         return to_write
-    # def read(self, file_name, line_number):
-        # import linecache
-        # line = linecache.getline(file_name, line_number)
-        # print("Line is ", line)
-        # line = line.split(", ")
-        # if (Validators.validate_amount_or_id(line[0]) and Validators.payment_validation(line[1]) and
-                # Validators.validate_amount_or_id(line[2]) and Validators.validate_discount(line[3]) and
-                # Validators.validate_date(dt.datetime(int(line[4]), int(line[5]), int(line[6]))) and
-                # Validators.validate_date(dt.datetime(int(line[7]), int(line[8]), int(line[9]))) and
-                # Validators.validate_email(line[10])):
-            # result = Order(line[0], line[1], line[2], line[3], int(line[4]), int(line[5]), int(line[6]), int(line[7]),
-                       # int(line[8]), int(line[9]), line[10])
-            # return result
-        # else:
-            # print("Error in file (wrong typename in line", line_number, ")!")
 
     def append_to_file(self, file_name, cut):
         if Validators.file_exists(file_name):
@@ -160,22 +145,6 @@ class Order:
             file.write(line)
         else:
             print("Error occurred while trying to append to file. File does no exists")
-
-    # def changer(self, choice, new_data):
-        # if choice == 1 and Validators.validate_id(new_data):
-            # self.id = new_data
-        # if choice == 2 and Validators.payment_validation(new_data):
-            # self.order_status = new_data
-        # if choice == 3 and Validators.validate_amount(new_data):
-            # self.amount = new_data
-        # if choice == 4 and Validators.validate_discount(new_data):
-            # self.discount = new_data
-        # if choice == 5 and Validators.validate_date(new_data):
-            # self.order_date = new_data
-        # if choice == 6 and Validators.validate_date(new_data):
-            # self.shipped_date = new_data
-        # if choice == 7 and Validators.validate_email(new_data):
-            # self.customer_email = new_data
 
     def changer2(self, choice, new_data):
         for key in self.attr_dict:
