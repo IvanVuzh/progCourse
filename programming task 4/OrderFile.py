@@ -17,6 +17,20 @@ class Order:
                  'order_date': 'order_date',
                  'shipped_date': 'shipped_date',
                  'customer_email': 'customer_email'}
+    setters = {'id': 'set_id',
+               'order_status': 'set_status',
+               'amount': 'amount',
+               'discount': 'discount',
+               'order_date': 'order_date',
+               'shipped_date': 'shipped_date',
+               'customer_email': 'customer_email'}
+    error_messages = ["Error in line (wrong id in line)",
+                      "Error in line (wrong order status in line)",
+                      "Error in line (wrong amount in line)",
+                      "Error in line (wrong discount in line)",
+                      "Error in line (wrong order date in line)",
+                      "Error in line (wrong shipped date in line)",
+                      "Error in line (wrong customer email in line)"]
 
     def __init__(self, dict_of_data):
         for key in dict_of_data:
@@ -72,6 +86,40 @@ class Order:
             print("######## Caught an error in data file ########")
             return 1
 
+    def str_to_order2(self, line):
+        line = line.split(", ")
+        # print("line = ", line)
+        all_is_validated = True
+        error_list = []
+        line_iter = 0
+        # print(line)
+        for field in self.attr_dict:
+            validator_name = Validators.validators_of_order_fields[field]
+            if not getattr(Validators, validator_name)(line[line_iter]):
+                error_list.append(line_iter)
+                all_is_validated = False
+            if line_iter != len(line):
+                line_iter += 1
+        if datetime.datetime.strptime(line[4], '%Y-%m-%d') > datetime.datetime.strptime(line[5], '%Y-%m-%d'):
+            print("Error in line (order was made after shipping (change dates))")
+            all_is_validated = False
+        if all_is_validated:
+            dictionary = self.attr_dict.copy()
+            i = 0
+            for name in self.attr_dict:
+                # print(dictionary[name] + "=" + line[i])
+                dictionary[name] = line[i].lower()
+                # print(dictionary[name])
+                i += 1
+            # print("Created dictionary is", dictionary)
+            res = Order(dictionary)
+            return res
+        else:
+            for error in error_list:
+                print(self.error_messages[error])
+            # print("######## Caught an error in data file in line", line_number + 1, "########")
+            return 1
+
     def make_str_for_print(self):
         to_print = "#################################################################\n" \
                    "Order info: \n"
@@ -87,21 +135,6 @@ class Order:
         to_write = to_write[:-2]
         to_write += '\n'
         return to_write
-    # def read(self, file_name, line_number):
-        # import linecache
-        # line = linecache.getline(file_name, line_number)
-        # print("Line is ", line)
-        # line = line.split(", ")
-        # if (Validators.validate_amount_or_id(line[0]) and Validators.payment_validation(line[1]) and
-                # Validators.validate_amount_or_id(line[2]) and Validators.validate_discount(line[3]) and
-                # Validators.validate_date(dt.datetime(int(line[4]), int(line[5]), int(line[6]))) and
-                # Validators.validate_date(dt.datetime(int(line[7]), int(line[8]), int(line[9]))) and
-                # Validators.validate_email(line[10])):
-            # result = Order(line[0], line[1], line[2], line[3], int(line[4]), int(line[5]), int(line[6]), int(line[7]),
-                       # int(line[8]), int(line[9]), line[10])
-            # return result
-        # else:
-            # print("Error in file (wrong typename in line", line_number, ")!")
 
     def append_to_file(self, file_name, cut):
         if Validators.file_exists(file_name):
@@ -113,26 +146,45 @@ class Order:
         else:
             print("Error occurred while trying to append to file. File does no exists")
 
-    # def changer(self, choice, new_data):
-        # if choice == 1 and Validators.validate_id(new_data):
-            # self.id = new_data
-        # if choice == 2 and Validators.payment_validation(new_data):
-            # self.order_status = new_data
-        # if choice == 3 and Validators.validate_amount(new_data):
-            # self.amount = new_data
-        # if choice == 4 and Validators.validate_discount(new_data):
-            # self.discount = new_data
-        # if choice == 5 and Validators.validate_date(new_data):
-            # self.order_date = new_data
-        # if choice == 6 and Validators.validate_date(new_data):
-            # self.shipped_date = new_data
-        # if choice == 7 and Validators.validate_email(new_data):
-            # self.customer_email = new_data
-
     def changer2(self, choice, new_data):
         for key in self.attr_dict:
             if key == choice:
                 setattr(self, key, new_data)
+
+    def edit_data(self, field_to_edit, new_data):
+        validator_name = Validators.validators_of_order_fields[field_to_edit]
+        if getattr(Validators, validator_name)(new_data):
+            setattr(self, self.setters[field_to_edit], new_data)
+        else:
+            print("Wrong info entered")
+
+    def set_id(self, new_id):
+        setattr(self, 'id', new_id)
+        return True
+
+    def set_status(self, new_status):
+        setattr(self, 'order_status', new_status)
+        return True
+
+    def set_amount(self, new_amount):
+        setattr(self, 'amount', new_amount)
+        return True
+
+    def set_discount(self, new_discount):
+        setattr(self, 'discount', new_discount)
+        return True
+
+    def set_order_date(self, new_order_date):
+        setattr(self, 'order_date', new_order_date)
+        return True
+
+    def set_shipped_date(self, new_shipped):
+        setattr(self, 'shipped_date', new_shipped)
+        return True
+
+    def set_email(self, new_email):
+        setattr(self, 'customer_email', new_email)
+        return True
 
     def for_search(self, data):
         for name in self.attr_dict:

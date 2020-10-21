@@ -25,8 +25,9 @@ class Collection:
     def add_existed_list(self, _list_of_orders):
         self.list_of_orders = _list_of_orders
 
-    def add_order(self, order):
+    def add_order(self, order, file_name):
         self.list_of_orders.append(order)
+        self.rewriting_to_file(file_name)
 
     def search(self, data):
         for i in range(len(self.list_of_orders)):
@@ -41,21 +42,6 @@ class Collection:
             for name in Order.attr_dict:
                 if user_choice == name:
                     self.list_of_orders.sort(key=lambda Order: getattr(Order, Order.attr_dict[name]))
-
-        # if user_choice == 1:
-            # self.list_of_orders.sort(key=lambda Order: Order.id)
-        # if user_choice == 2:
-            # self.list_of_orders.sort(key=lambda Order: Order.order_status)
-        # if user_choice == 3:
-            # self.list_of_orders.sort(key=lambda Order: Order.amount)
-        # if user_choice == 4:
-            # self.list_of_orders.sort(key=lambda Order: Order.discount)
-        # if user_choice == 5:
-            # self.list_of_orders.sort(key=lambda Order: Order.order_date)
-        # if user_choice == 6:
-            # self.list_of_orders.sort(key=lambda Order: Order.shipped_date)
-        # if user_choice == 7:
-            # self.list_of_orders.sort(key=lambda Order: Order.customer_email)
 
     # def edit_order(self):
 
@@ -82,7 +68,9 @@ class Collection:
                 if i != len(lines) - 1:
                     line = line[:-1]
                 # print("line is:", line)
-                if Order.str_to_order(to_add, line) != 1:
+                if Order.str_to_order(to_add, line) == 1:
+                    print("Data error in line " + str(i + 1))
+                else:
                     to_add = Order.str_to_order(to_add, line)
                     self.list_of_orders.append(to_add)
 
