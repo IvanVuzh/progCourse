@@ -86,7 +86,7 @@ class Order:
             print("######## Caught an error in data file ########")
             return 1
 
-    def str_to_order2(self, line, line_number):
+    def str_to_order2(self, line):
         line = line.split(", ")
         # print("line = ", line)
         all_is_validated = True
