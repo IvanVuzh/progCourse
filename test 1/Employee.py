@@ -73,7 +73,7 @@ class Employee:
                 i += 1
             # print("Created dictionary is", dictionary)
             res = Employee(dictionary)
-            print("Employee added")
+            # ("Employee added")
             return res
         else:
             for error in error_list:
