@@ -11,6 +11,7 @@ def main():
     employees = Collection()
     employees.read(file_name)
     menu_choice = 0
+    # print(employees.get_len())
     while menu_choice != 4:
         print("You are in main menu. Possible options:\n"
               "1 - add an employee\n"
@@ -19,17 +20,21 @@ def main():
               "4 - exit program\n"
               "Choose your option: ")
         menu_choice = input()
-        if menu_choice == 1:
+        print("choice =", menu_choice)
+        if int(menu_choice) == 1:
+            # print("went elif 1")
             data = input("Enter a LINE which is similar to (with a ', ' as a delimiter or enter 0 to skip)\n")
             if data == 0:
                 pass
-            new_empolyee = Employee(data)
-            employees.add_worker(new_empolyee)
-        elif menu_choice == 2:
+            new_employee = Employee(data)
+            employees.add_worker(new_employee)
+        elif int(menu_choice) == 2:
+            # print("went elif 2")
             print(employees.all_salary())
-        elif menu_choice == 3:
+        elif int(menu_choice) == 3:
+            # print("went elif 3")
             employees.print()
-        elif menu_choice == 4:
+        elif int(menu_choice) == 4:
             print("Have a nice day! Goodbye!")
 
 
