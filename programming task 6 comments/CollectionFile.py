@@ -11,17 +11,19 @@ class Collection:
         self.memory = Caretaker()
 
     def undo(self):
-        print("undo")
+        # print("undo")
         if self.memory.current_position > 0:
-            to_remember = Memento(self)
-            self.list_of_orders = self.memory.undo(to_remember).get_memento_value().list_of_orders
+            to_remember = copy.deepcopy(Memento(self))
+            self.list_of_orders = self.memory.undo(to_remember)
+            # print("List of orders is", type(self.list_of_orders))
         else:
             print("#######This is first state. There is nothing to undo#######\n")
 
     def redo(self):
         if self.memory.undone > 0:
-            to_remember = Memento(self)
-            self.list_of_orders = self.memory.redo(to_remember).get_memento_value().list_of_orders
+            to_remember = copy.deepcopy(Memento(self))
+            self.list_of_orders = self.memory.redo(to_remember)
+            # print("List of orders is", type(self.list_of_orders))
         else:
             print("#######This is last state. There is noting to redo#######\n")
 

@@ -29,16 +29,15 @@ class Caretaker:
         # self.show_memory()
 
     def undo(self, current_state):
-        print("undone=", self.undone)
+        # print("undone=", self.undone)
         # print("cur pos =", self.current_position)
         if self.current_position > 0:
-            to_return = copy.deepcopy(self.memorized_collections.pop(self.current_position - 1))
-            # to_return =
-            self.memorized_collections.insert(self.current_position, current_state)
+            to_return = copy.deepcopy(self.memorized_collections.pop(self.current_position - 1)).get_memento_value().list_of_orders
+            self.memorized_collections.insert(self.current_position-1, current_state)
             self.current_position -= 1
             # print("cur pos =", self.current_position)
             self.undone += 1
-            print("undone=", self.undone)
+            # print("undone=", self.undone)
             return to_return
         else:
             print("This is first state. There is nothing to undo")
@@ -46,10 +45,11 @@ class Caretaker:
     def redo(self, current_state):
         # print(self.undone)
         if self.undone > 0:
-            to_return = copy.deepcopy(self.memorized_collections.pop(self.current_position))
+            to_return = copy.deepcopy(self.memorized_collections.pop(self.current_position)).get_memento_value().list_of_orders
             self.memorized_collections.insert(self.current_position, current_state)
             self.current_position += 1
             self.undone -= 1
+            # print(self.undone)
             return to_return
         else:
             print("This is last state. There is noting to redo")

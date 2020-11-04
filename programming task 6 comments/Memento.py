@@ -7,3 +7,6 @@ class Memento:
 
     def get_memento_value(self):
         return self.state
+
+    def print(self):
+        self.state.print()
