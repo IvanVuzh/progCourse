@@ -43,10 +43,8 @@ class Validators:
     def validate_discount(data):
         if represents_int(data):
             if 99 < int(data) or int(data) < 0:
-                # print( + data)
                 return False
             else:
-                # print("Validated")
                 return True
         else:
             print("Error in line (discount not int). Wrong data: " + data)
@@ -59,7 +57,6 @@ class Validators:
         if os.stat(file_name).st_size == 0:
             return False
         else:
-            # print("File isn't empty")
             return True
 
     @staticmethod
@@ -95,7 +92,6 @@ class Validators:
         if re.search(regex, data):
             return True
         else:
-            # print("Error in line (wrong email in line). Wrong data: " + data)
             return False
 
     @staticmethod
@@ -116,10 +112,8 @@ class Validators:
             if int(data) > 0:
                 return True
             else:
-                # print("Error in line (wrong amount in line). Wrong data: " + data)
                 return False
         else:
-            # print("Error in line (amount not int). Wrong data: " + data)
             return False
 
     @staticmethod
@@ -139,7 +133,6 @@ class Validators:
             if int(data) > 0:
                 return True
             else:
-                # print("Error in line (wrong id in line). Wrong data: " + data)
                 return False
         else:
             print("Error in line (id not int). Wrong data: " + data)
@@ -161,7 +154,6 @@ class Validators:
         if data == "paid" or data == "not paid" or data == "refunded":
             return True
         else:
-            # print("Error in line (wrong payment status in line). Wrong data: " + data)
             return False
 
     @staticmethod
@@ -184,13 +176,19 @@ class Validators:
         year = int(data[0])
         month = int(data[1])
         day = int(data[2])
-        # print("Year: " + str(year) + "\t month: " + str(month) + "\tday: " + str(day))
         try:
             datetime.date(year, month, day)
             return True
         except ValueError:
-            # print("This is the incorrect date string format. It should be YYYY-MM-DD")
             return False
+
+    @staticmethod
+    def two_dates_validation(date1, date2):
+        if datetime.datetime.strptime(date1, '%Y-%m-%d') > datetime.datetime.strptime(date2, '%Y-%m-%d'):
+            print("Error in line (order was made after shipping (change dates))")
+            return False
+        else:
+            return True
 
     @staticmethod
     def date_decorator(date_setter):
@@ -203,12 +201,10 @@ class Validators:
             year = int(data[0])
             month = int(data[1])
             day = int(data[2])
-            # print("Year: " + str(year) + "\t month: " + str(month) + "\tday: " + str(day))
             try:
                 datetime.date(year, month, day)
                 return date_setter(order_self, data)
             except ValueError:
-                # print("This is the incorrect date string format. It should be YYYY-MM-DD")
                 return False
         return validate_date
 # file ready
