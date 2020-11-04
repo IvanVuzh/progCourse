@@ -5,6 +5,15 @@ import re
 from ValidationFile import Validators
 
 
+def dates_check(date1, date2):
+    try:
+        datetime.datetime.strptime(date1, '%Y-%m-%d')
+        datetime.datetime.strptime(date2, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+
 def get_data_from_dict_by_key(dict_of_data, key):
     return dict_of_data[key]
 
@@ -39,60 +48,9 @@ class Order:
 
     def str_to_order(self, line):
         line = line.split(", ")
-        # print("line = ", line)
-        is_error = False
-        date_error = False
-        if not Validators.validate_id(line[0]):
-            print("Error in line (wrong id in line). Wrong data: " + line[0])
-            is_error = True
-        if not Validators.payment_validation(line[1]):
-            print("Error in line (wrong order status in line). Wrong data: " + line[1])
-            is_error = True
-        if not Validators.validate_amount(line[2]):
-            print("Error in line (wrong amount in line). Wrong data: " + line[2])
-            is_error = True
-        if not Validators.validate_discount(line[3]):
-            print("Error in line (wrong discount in line). Wrong data: " + line[3])
-            is_error = True
-        if not Validators.validate_date(line[4]):   # still raising an error
-            print("Error in line. Wrong order date in line. Incorrect data format, should be YYYY-MM-DD. Wrong data: "
-                  + line[4])
-            is_error = True
-            date_error = True
-        if not Validators.validate_date(line[5]):   # still raising an error
-            print("Error in line. Wrong shipped date in line. Incorrect data format, should be YYYY-MM-DD. Wrong data: "
-                  + line[5])
-            is_error = True
-            date_error = True
-        if not date_error:
-            if datetime.datetime.strptime(line[4], '%Y-%m-%d') > datetime.datetime.strptime(line[5], '%Y-%m-%d'):
-                print("Error in line (order was made after shipping (change dates))")
-                is_error = True
-        if not Validators.validate_email(line[6]):
-            print("Error in line (wrong email in line). Wrong data: " + line[6])
-            is_error = True
-        if not is_error:
-            dictionary = self.attr_dict.copy()
-            i = 0
-            for name in self.attr_dict:
-                # print(dictionary[name] + "=" + line[i])
-                dictionary[name] = line[i].lower()
-                # print(dictionary[name])
-                i += 1
-            # print("Created dictionary is", dictionary)
-            res = Order(dictionary)
-            return res
-        else:
-            print("######## Caught an error in data file ########")
-            return 1
-
-    def str_to_order2(self, line):
-        line = line.split(", ")
-        # print("line = ", line)
         all_is_validated = True
         error_list = []
         line_iter = 0
-        # print(line)
         for field in self.attr_dict:
             validator_name = Validators.validators_of_order_fields[field]
             if not getattr(Validators, validator_name)(line[line_iter]):
@@ -100,24 +58,19 @@ class Order:
                 all_is_validated = False
             if line_iter != len(line):
                 line_iter += 1
-        if datetime.datetime.strptime(line[4], '%Y-%m-%d') > datetime.datetime.strptime(line[5], '%Y-%m-%d'):
-            print("Error in line (order was made after shipping (change dates))")
-            all_is_validated = False
+            if dates_check(line[4], line[5]):
+                all_is_validated = Validators.two_dates_validation(line[4], line[5])
         if all_is_validated:
             dictionary = self.attr_dict.copy()
             i = 0
             for name in self.attr_dict:
-                # print(dictionary[name] + "=" + line[i])
                 dictionary[name] = line[i].lower()
-                # print(dictionary[name])
                 i += 1
-            # print("Created dictionary is", dictionary)
             res = Order(dictionary)
             return res
         else:
             for error in error_list:
                 print(self.error_messages[error])
-            # print("######## Caught an error in data file in line", line_number + 1, "########")
             return 1
 
     def make_str_for_print(self):

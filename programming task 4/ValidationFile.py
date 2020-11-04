@@ -142,3 +142,11 @@ class Validators:
         except ValueError:
             # print("This is the incorrect date string format. It should be YYYY-MM-DD")
             return False
+
+    @staticmethod
+    def two_dates_validation(date1, date2):
+        if datetime.datetime.strptime(date1, '%Y-%m-%d') > datetime.datetime.strptime(date2, '%Y-%m-%d'):
+            print("Error in line (order was made after shipping (change dates))")
+            return False
+        else:
+            return True

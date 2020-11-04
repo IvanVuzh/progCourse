@@ -19,6 +19,14 @@ from ValidationFile import represents_int
 # не повинна бути захардкоджена, читання з файла - окрема функція, тощо.
 # 8. Всі методи повинні бути універсальні і не залежати від кількості параметрів класу.
 
+choice_to_attr_dict = {'1': 'id',
+                       '2': 'order_status',
+                       '3': 'amount',
+                       '4': 'discount',
+                       '5': 'order_date',
+                       '6': 'shipped_date',
+                       '7': 'customer_email'}
+
 
 def sort_user_choice():
     read = input("Enter a parameter to be sorted by:\n"
@@ -31,20 +39,7 @@ def sort_user_choice():
                  "7 - customer email\n")
     while not Validators.menu_choice_and_sort_and_changer_validation(read):
         read = input()
-    if int(read) == 1:
-        sort_choice = 'id'
-    elif int(read) == 2:
-        sort_choice = 'order_status'
-    elif int(read) == 3:
-        sort_choice = 'amount'
-    elif int(read) == 4:
-        sort_choice = 'discount'
-    elif int(read) == 5:
-        sort_choice = 'order_date'
-    elif int(read) == 6:
-        sort_choice = 'shipped_date'
-    elif int(read) == 7:
-        sort_choice = 'customer_email'
+    sort_choice = choice_to_attr_dict[read]
     return sort_choice
 
 
@@ -68,21 +63,7 @@ def editing_the_collection(collection, file_name):
             while not Validators.menu_choice_and_sort_and_changer_validation(int(read)) \
                     or not represents_int(read):
                 read = input("Reenter an info to be changed")
-            to_change_field = int(read)
-            if int(read) == 1:
-                to_change_field = 'id'
-            elif int(read) == 2:
-                to_change_field = 'order_status'
-            elif int(read) == 3:
-                to_change_field = 'amount'
-            elif int(read) == 4:
-                to_change_field = 'discount'
-            elif int(read) == 5:
-                to_change_field = 'order_date'
-            elif int(read) == 6:
-                to_change_field = 'shipped_date'
-            elif int(read) == 7:
-                to_change_field = 'customer_email'
+            to_change_field = choice_to_attr_dict[read]
             read = input("Enter new data:")
             collection.change2(to_change_id, to_change_field, read, file_name)
 
@@ -101,8 +82,6 @@ def add_elem_to_collection(collection, file_name):
         collection.add_order(to_add)
         collection.rewriting_to_file(file_name)
     collection.print()
-    print()
-    print()
 
 
 def main():
@@ -132,14 +111,10 @@ def main():
         if menu_choice == 1:
             read = input("Enter data to be searched:")
             collection.search(read)
-            print()
-            print()
         elif menu_choice == 2:
             sort_choice = sort_user_choice()
             collection.sort(sort_choice)
             collection.print()
-            print()
-            print()
         elif menu_choice == 3:
             read = input("Enter a number of order to be deleted(enter 0 not to delete anything)")
             if represents_int(read):
@@ -150,15 +125,11 @@ def main():
                 else:
                     collection.deleter(int(read), file_name)
             collection.print()
-            print()
-            print()
         elif menu_choice == 4:
             add_elem_to_collection(collection, file_name)
         elif menu_choice == 5:
             editing_the_collection(collection, file_name)
             collection.print()
-            print()
-            print()
         elif menu_choice == 6:
             print("Have a nice day! Goodbye!")
 
