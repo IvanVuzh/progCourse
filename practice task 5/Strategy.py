@@ -9,7 +9,6 @@ class Strategy:
     def generate(linked_list, pos, insertion):  # linked list is starting list
         given_list = linked_list
         first_part = insertion
-
         if given_list.size() == 0:
             return insertion
         else:
@@ -18,7 +17,8 @@ class Strategy:
             while current.next_node:
                 # print("current.next_node while 1 else")
                 if int(pos) == iter:
-                    first_part.get_last_node().next_node = current
+                    # print("\nwhile\n")
+                    first_part.get_last_node().next_node = current.next_node
                     break
                 iter += 1
 
@@ -31,6 +31,7 @@ class Strategy:
             current = given_list.head
             iterator = 0
             while current.next_node:
+                # print("\nwhile strategy\n")
                 # print("current.next_node while 2 else", pos)
                 iterator += 1
                 if int(pos) == iterator:
@@ -51,6 +52,9 @@ class StrategyOne(Strategy):
         to_return = LinkedList()
         for num in rez:
             to_return.add_tail(num)
+        # print("\n to_return strategy 1",) # тут правильний ліст
+        # to_return.print()
+        print()
         return super().generate(linked_list, pos, to_return)
 
 

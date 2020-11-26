@@ -112,6 +112,7 @@ def main():
             print("Using second strategy")
 
         elif option == 3:
+            # print("\noption 3\n")
             list_choice = list_choice_func()
             position = input('Enter position to insert new values: ')
             data = input('Enter the value of the parameter (amount to generate or name of file): ')

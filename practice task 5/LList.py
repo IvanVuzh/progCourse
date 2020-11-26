@@ -90,8 +90,8 @@ class LinkedList(object):
     def get_last_node(self):
         if self.size() != 0:
             last = self.head
-            while last.get_next():
-                last = last.get_next()
+            while last.next_node:
+                last = last.next_node
             return last
 
     def print(self):

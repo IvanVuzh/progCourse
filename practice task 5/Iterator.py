@@ -14,6 +14,7 @@ class Iterator:
             raise StopIteration
         self.returned += 1
         while True:
+            # print("\nwhile iterator\n")
             self.x += 1
             sum = self.x
             current_dilnyk = 1
