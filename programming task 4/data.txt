@@ -1,5 +1,0 @@
-3228, paid, 5, 10, 2019-01-22, 2019-09-25, help@gmail.com
-12441, not paid, 55, 15, 2020-10-19, 2020-10-20, me@ukr.net
-6547, refunded, 1, 99, 2020-10-07, 2020-10-07, please@yahoo.com
-1, not paid, 1, 2, 1970-15-01, 1970-01-01, noemail@gmail.com
-153, paid, 5, 67, 2020-10-08, 2020-10-09, iasdsd@gmail.com
