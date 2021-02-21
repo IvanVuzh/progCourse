@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace PracticeTask1
 {
-    class Order
+    class Order: ICloneable
     {
         protected int id;
         protected string order_status;
@@ -20,15 +20,25 @@ namespace PracticeTask1
         protected string shipped_date;
         protected string customer_email;
 
+
+        public enum status_variation //useless 
+        {
+            paid = 1,
+            not_paid = 2,
+            refunded = 3
+        }
+        public enum field_are_ints //useless 
+        {
+            Id = 1,
+            Amount = 2,
+            Discount = 3
+        }
         public int Id
         {
             get => id;
-            set 
+            set
             {
-                if (Validation.check_id_or_amount(value))
-                    id = value;
-                else
-                    id = -1;
+                id = Validation.check_id_or_amount(value) ? value : -1;
             }
         }
         public string Order_status
@@ -36,10 +46,12 @@ namespace PracticeTask1
             get => order_status;
             set
             {
-                if (Validation.status_check(value))
-                    order_status = value;
-                else
-                    order_status = "invalid";
+                if (!Validation.status_check(value))
+                {
+                    Console.WriteLine("Order status data error");
+                    id = -1;
+                }
+                order_status = value;
             }
         }
         public int Amount
@@ -47,10 +59,9 @@ namespace PracticeTask1
             get => amount;
             set
             {
-                if (Validation.check_id_or_amount(value))
-                    amount = value;
-                else
-                    amount = -1;
+                if (!Validation.check_id_or_amount(value))
+                    id = -1;
+                amount = value;
             }
         }
         public int Discount
@@ -58,10 +69,9 @@ namespace PracticeTask1
             get => discount;
             set
             {
-                if (Validation.check_discount(value))
-                    discount = value;
-                else
-                    discount = -1;
+                if (!Validation.check_discount(value))
+                    id = -1;
+                discount = value;
             }
         }
         public string Order_date
@@ -69,10 +79,10 @@ namespace PracticeTask1
             get => order_date;
             set
             {
-                if (Validation.date_check(value))
-                    order_date = value;
-                else
-                    order_date = "invalid";
+                if (!Validation.date_check(value))
+                    id = -1;
+                order_date = value;
+
             }
         }
         public string Shipped_date
@@ -80,10 +90,9 @@ namespace PracticeTask1
             get => shipped_date;
             set
             {
-                if (Validation.date_check(value))
-                    shipped_date = value;
-                else
-                    shipped_date = "invalid";
+                if (!Validation.date_check(value))
+                    id = -1;
+                shipped_date = value;
             }
         }
         public string Customer_email
@@ -91,35 +100,11 @@ namespace PracticeTask1
             get => customer_email;
             set
             {
-                if (Validation.customer_email_check(value))
-                    customer_email = value;
-                else
-                    customer_email = "invalid";
+                if (!Validation.customer_email_check(value))
+                    id = -1;
+                customer_email = value;
             }
         }
-
-        public Order(int _id, string _order_status, int _amount, int _discount, string _order_date, string _shipped_date, string _customer_email)
-        {
-            Id = _id;
-            Order_status = _order_status;
-            Amount = _amount;
-            Discount = _discount;
-            Order_date = _order_date;
-            Shipped_date = _shipped_date;
-            Customer_email = _customer_email;
-        }
-
-        public Order()
-        {
-            Id = -1;
-            Order_status = "invalid";
-            Amount = -1;
-            Discount = -1;
-            Order_date = "invalid";
-            Shipped_date = "invalid";
-            Customer_email = "invalid";
-        }
-
         public void print()
         {
             Console.WriteLine("\n###### O R D E R ######");
@@ -129,62 +114,29 @@ namespace PracticeTask1
             }
             Console.WriteLine("#######################\n");
         }
-
         public string str_for_file()
         {
             string json_for_file = JsonSerializer.Serialize<Order>(this);
             return json_for_file;
-        }      
+        }
         public bool all_check()
         {
-            bool res = true;
-            bool date_prob = false;
-            if (this.id == -1)
+            foreach (PropertyInfo prop in this.GetType().GetProperties())
             {
-                Console.WriteLine("Invalid id");
-                res = false;
+                if (prop.GetValue(this) is null)
+                    return false;
             }
-            if (this.order_status == "invalid")
-            {
-                Console.WriteLine("Invalid order status");
-                res = false;
-            }
-            if (this.amount == -1)
-            {
-                Console.WriteLine("Invalid amount");
-                res = false;
-            }
-            if (this.discount == -1)
-            {
-                Console.WriteLine("Invalid discount");
-                res = false;
-            }
-            if (this.order_date == "invalid")
-            {
-                Console.WriteLine("Invalid order date");
-                res = false;
-                date_prob = true;
-            }
-            if (this.shipped_date == "invalid")
-            {
-                Console.WriteLine("Invalid shipped date");
-                res = false;
-                date_prob = true;
-            }
-            if (this.customer_email == "invalid")
-            {
-                Console.WriteLine("Invalid customer email");
-                res = false;
-            }
-            if (!date_prob)
+            if (id == -1)
+                return false;
+            else
             {
                 if (!Validation.order_shipped_problem_check(this.order_date, this.shipped_date))
                 {
                     Console.WriteLine("Date of order must be made before shipping goods");
-                    res = false;
+                    return false;
                 }
             }
-            return res;
+            return true;
         }
 
         public bool found_for_search(string data)
@@ -193,9 +145,8 @@ namespace PracticeTask1
             PropertyInfo[] properties = typeof(Order).GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                if(Convert.ToString(property.GetValue(this)).Contains(data))
+                if (Convert.ToString(property.GetValue(this)).Contains(data))
                 {
-                    //Console.WriteLine("Found");
                     res = true;
                 }
             }
@@ -204,89 +155,39 @@ namespace PracticeTask1
 
         public void console_input()
         {
+
             string input;
-
-
-            Console.WriteLine("Enter id:");
-            input = Console.ReadLine();
-            while (!Validation.check_if_int(input) || Convert.ToInt32(input) < 1)
+            foreach (PropertyInfo prop in this.GetType().GetProperties())
             {
-                Console.WriteLine("Reenter id:");
+                Console.WriteLine("Enter order {0}", prop.Name);
                 input = Console.ReadLine();
-            }
-            this.Id = Convert.ToInt32(input);
-
-
-            Console.WriteLine("Enter order status:");
-            input = Console.ReadLine();
-            while (!Validation.status_check(input))
-            {
-                Console.WriteLine("Reenter order status:");
-                input = Console.ReadLine();
-            }
-            this.Order_status = input;
-
-
-            Console.WriteLine("Enter amount:");
-            input = Console.ReadLine();
-            while (!Validation.check_if_int(input) || Convert.ToInt32(input) < 1)
-            {
-                Console.WriteLine("Reenter amount:");
-                input = Console.ReadLine();
-            }
-            this.Amount = Convert.ToInt32(input);
-
-
-            Console.WriteLine("Enter discount:");
-            input = Console.ReadLine();
-            while (!Validation.check_if_int(input) || Convert.ToInt32(input) < 0 || Convert.ToInt32(input) > 100)
-            {
-                Console.WriteLine("Reenter discount:");
-                input = Console.ReadLine();
-            }
-            this.Discount = Convert.ToInt32(input);
-
-
-            bool date_problem = true;
-            while (date_problem)
-            { 
-                Console.WriteLine("Enter order date:");
-                input = Console.ReadLine();
-                while (!Validation.date_check(input))
+                if (Enum.IsDefined(typeof(Order.field_are_ints), prop.Name))
                 {
-                    Console.WriteLine("Reenter order date:");
-                    input = Console.ReadLine();
-                }
-                this.Order_date = input;
-
-
-                Console.WriteLine("Enter shipped date:");
-                input = Console.ReadLine();
-                while (!Validation.date_check(input))
-                {
-                    Console.WriteLine("Reenter shipped date:");
-                    input = Console.ReadLine();
-                }
-                this.Shipped_date = input;
-
-                if (Validation.order_shipped_problem_check(this.Order_date, this.Shipped_date))
-                {
-                    date_problem = false;
+                    try
+                    {
+                        Convert.ToInt32(input);
+                        prop.SetValue(this, Convert.ToInt32(input));
+                    }
+                    catch
+                    {
+                        Console.WriteLine("{0} must be INTEGER", prop.Name);
+                    }
                 }
                 else
-                    Console.WriteLine("Date of order must be made before shipping goods");
+                {
+                    prop.SetValue(this, input);
+                }
             }
+        }
 
-            Console.WriteLine("Enter customer email:");
-            input = Console.ReadLine();
-            while (!Validation.customer_email_check(input))
+        public object Clone()
+        {
+            Order o = new Order();
+            foreach (PropertyInfo prop in this.GetType().GetProperties())
             {
-                Console.WriteLine("Reenter customer email:");
-                input = Console.ReadLine();
+                prop.SetValue(o, prop.GetValue(this));
             }
-            this.Customer_email = input;
-
-            
+            return o;
         }
     }
 }

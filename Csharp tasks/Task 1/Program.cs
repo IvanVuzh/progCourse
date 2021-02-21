@@ -19,7 +19,8 @@ namespace PracticeTask1
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Enter path to data file:");
             string file_path = Console.ReadLine();
-            //      "E:/Практика С#/PracticeTask1/PracticeTask1/data.json"
+            //          "E:/Практика С#/PracticeTask1/PracticeTask1/data.json"
+            
             Collection collection = new Collection();
             collection.read_from_file(file_path);
             collection.print();
@@ -40,7 +41,6 @@ namespace PracticeTask1
                     case 2:
                         //sort
                         string sorting_param = param_name_input();
-                        //Console.WriteLine(sorting_param);
                         collection.sort(sorting_param);
                         collection.print();
                         collection.write_to_file(file_path);
@@ -71,14 +71,12 @@ namespace PracticeTask1
                         collection.print();
                         break;
                     case 6:
+                        //exit
                         Console.WriteLine("Have a nice day. Goodbye!");
                         do_continue = false;
                         break;
                 }
-
             }
-
-
             Console.ReadKey();
         }
 
@@ -96,7 +94,7 @@ namespace PracticeTask1
               "5 - edit an order and rewrite collection in file\n" +
               "6 - exit program\n");
             string choice = Console.ReadLine();
-            while(!Validation.check_if_int(choice) || Convert.ToInt32(choice) < 1 || Convert.ToInt32(choice) > 6)
+            while (!Validation.check_if_int(choice) || Convert.ToInt32(choice) < 1 || Convert.ToInt32(choice) > 6)
             {
                 Console.WriteLine("REENTER YOIR CHOICE:");
                 choice = Console.ReadLine();
@@ -104,7 +102,6 @@ namespace PracticeTask1
             res = Convert.ToInt32(choice);
             return res;
         }
-
         static string param_name_input()
         {
             string res;
@@ -127,7 +124,6 @@ namespace PracticeTask1
             res = order_fields[res];
             return res;
         }
-
         static int id_input()
         {
             int res;
@@ -143,7 +139,6 @@ namespace PracticeTask1
             res = Convert.ToInt32(input);
             return res;
         }
-
         static void console_color_1()
         {
             Console.BackgroundColor = ConsoleColor.White;
@@ -154,17 +149,15 @@ namespace PracticeTask1
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Green;
         }
-
         static Dictionary<string, string> order_fields = new Dictionary<string, string>
-        {
-            {"1", "Id"},
-            {"2", "Order_status"},
-            {"3", "Amount"},
-            {"4", "Discount" },
-            {"5", "Order_date"},
-            {"6", "Shipped_date"},
-            {"7", "Customer_email"}
-        };
-
+            {
+                {"1", "Id"},
+                {"2", "Order_status"},
+                {"3", "Amount"},
+                {"4", "Discount" },
+                {"5", "Order_date"},
+                {"6", "Shipped_date"},
+                {"7", "Customer_email"}
+            };
     }
 }
