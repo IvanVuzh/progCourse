@@ -186,7 +186,7 @@ namespace Task_5.Controllers
         [Route("products")]
         public ActionResult AddProduct([FromBody] ProductData data)
         {
-            var res = logic_operations.AddProduct(data.ProductId, data.NewAmount);
+            var res = logic_operations.AddProduct(data.ProductId, data.NewAmount, data.ProductName);
             if(res == null)
                 return BadRequest(new { status = 400, message = $"Invalid data" });
             return Ok(new { status = 200, message = $"{res} added" });

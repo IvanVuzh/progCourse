@@ -57,7 +57,14 @@ namespace Task_5.Controllers
             return Ok(new { status = 200, message = res });
         }
 
-
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("products/")]
+        public ActionResult GetAllProducts()
+        {
+            var res = logic_operations.GetProducts();
+            return Ok(new { status = 200, message = res });
+        }
 
 
 
@@ -103,7 +110,7 @@ namespace Task_5.Controllers
             var res = logic_operations.AddUser(data.Username, data.Password);
             if (res == null)
                 return BadRequest(new { status = "401", message="Error creating profile."});
-            return Ok(new { status = "200", message = res });
+            return Ok();
         }
 
         

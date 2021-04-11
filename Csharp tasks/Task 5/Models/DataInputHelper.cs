@@ -35,5 +35,8 @@ namespace Task_5.Models
         [Required]
         public int NewAmount { get; set; }
 
+        [Required]
+        public string ProductName { get; set; }
+
     }
 }

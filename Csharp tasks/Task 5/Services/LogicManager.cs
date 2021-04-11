@@ -245,7 +245,7 @@ namespace Task_5.Services
             }
         }
         
-        public Person AddUser(string username, string password)
+        public string AddUser(string username, string password)
         {
             Person new_user = new Person
             {
@@ -257,7 +257,7 @@ namespace Task_5.Services
             {
                 DBContext.Users.Add(new_user);
                 DBContext.SaveChanges();
-                return new_user;
+                return new_user.Login;
             }
             catch
             {
@@ -277,12 +277,13 @@ namespace Task_5.Services
             return null;
         }
 
-        public Product AddProduct(int id, int amount)
+        public Product AddProduct(int id, int amount, string name)
         {
             Product to_add = new Product
             {
                 Id = id,
-                Amount = amount
+                Amount = amount,
+                ProductName = name
             };
             try
             {
@@ -314,5 +315,9 @@ namespace Task_5.Services
             return savedPasswordHash;
         }
 
+        public List<Product> GetProducts()
+        {
+            return DBContext.Products.ToList();
+        }
     }
 }

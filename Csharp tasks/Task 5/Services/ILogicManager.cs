@@ -20,8 +20,10 @@ namespace Task_5.Services
         public Product ChangeProductAmount(int productId, int new_amount);
         public int GetProductAmount(int productId);
         public ClaimsIdentity GetIdentity(string username, string password);
-        public Person AddUser(string username, string password);
-        public Product AddProduct(int id, int amount);
+        public string AddUser(string username, string password);
+        public Product AddProduct(int id, int amount, string name);
         public Product DeleteProduct(int id);
+
+        public List<Product> GetProducts();
     }
 }
